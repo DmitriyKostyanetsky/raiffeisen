@@ -29,11 +29,12 @@ public class BasePage {
         element.sendKeys(inputText);
     }
 
-    public void backSpaceSymbols(WebElement element, int count) {
+    public void backSpaceSymbols(WebElement element, String value) {
         element.click();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < value.length(); i++) {
             element.sendKeys(Keys.BACK_SPACE);
         }
+        waitPageLoaded();
     }
 
     public void selectMenuItem(List<WebElement> menuElements, String name){
@@ -42,7 +43,6 @@ public class BasePage {
                 element.click();
                 return;
             }
-            System.out.println(element.getText());
         }
         Assert.fail("Не найден элмент коллеции - " + name);
     }
@@ -56,26 +56,32 @@ public class BasePage {
         js.executeScript("arguments[0].scrollIntoView();", element);
     }
 
-    public boolean isElementPresent(WebElement element) {
+    public void waitPageLoaded(){
+        WebDriverWait wait = new WebDriverWait(Init.getDriver(), 30);
+        wait.ignoring(NoSuchElementException.class).until((ExpectedCondition<Boolean>) driver ->
+                !isPresent( By.xpath("//*[@class='helpers-params loading']")));
+    }
+
+    public boolean isPresent(By locator){
         try {
-            Init.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            return element.isDisplayed();
-        } catch (NoSuchElementException e) {
+            Init.getDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+            return Init.getDriver().findElement(locator).isDisplayed();
+        }catch (NoSuchElementException e){
             return false;
-        }
-        finally {
-            Init.getDriver().manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        }finally {
+            Init.getDriver().manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         }
     }
 
-    public void waitCheckedValue(WebElement element, String expected) {
-        WebDriverWait wait = new WebDriverWait(Init.getDriver(), 10);
-        wait.withMessage(String.format("Неправильное значение [%s], ожидалось [%s]", element.getText(), expected))
+    public void checkElement(WebElement element, String expectedValue){
+        WebDriverWait wait = new WebDriverWait(Init.getDriver(), 30);
+        wait.withMessage("Ожидалось значение " + expectedValue)
                 .until((ExpectedCondition<Boolean>) driver -> {
-                    if (element.getText().equals(expected)) {
+                    if (element.getText().replace("руб.", "").replaceAll(" ", "").equals(expectedValue)) {
                         return Boolean.TRUE;
                     }
                     return false;
                 });
     }
+
 }
