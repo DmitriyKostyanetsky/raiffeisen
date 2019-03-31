@@ -21,4 +21,4 @@
 
     Примеры:
       |exMonthlyPayment |exTotalPayment|exPercentSum |exInterestRate|
-      |40 656.67         |4 838 437.03   |1 838 437.03   |10.49         |
+      |40 656.67         |4 838 435.07   |1 838 435.07   |10.49         |

@@ -73,13 +73,14 @@ public class BasePage {
         }
     }
 
-    public void checkElement(WebElement element, String expectedValue){
+    public void checkElement(String actual, String expectedValue){
         WebDriverWait wait = new WebDriverWait(Init.getDriver(), 30);
         wait.withMessage("Ожидалось значение " + expectedValue)
                 .until((ExpectedCondition<Boolean>) driver -> {
-                    if (element.getText().replace("руб.", "").replaceAll(" ", "").equals(expectedValue)) {
+                    if (actual.equals(expectedValue)) {
                         return Boolean.TRUE;
                     }
+                    System.out.println("Actual : " + actual + " Expected : " + expectedValue);
                     return false;
                 });
     }

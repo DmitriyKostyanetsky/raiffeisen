@@ -82,9 +82,9 @@ public class CalcSteps {
 
     @When("проверить введенные значения String \"(.+)\" String \"(.+)\" String \"(.+)\" String \"(.+)\"")
     public void checkEnteredValues(String exMonthlyPayment, String exTotalPayment, String exPercentSum, String exInterestRate) {
-        calcPage.checkElement(calcPage.monthlyPayment, exMonthlyPayment);
-        calcPage.checkElement(calcPage.totalPayment, exTotalPayment);
-        calcPage.checkElement(calcPage.percentSum, exPercentSum);
-        calcPage.checkElement(calcPage.interestRate, exInterestRate);
+        calcPage.checkElement(calcPage.monthlyPayment.getText().replace("руб.", "").replaceAll(" ", ""), exMonthlyPayment);
+        calcPage.checkElement(calcPage.totalPayment.getText().replace("руб.", "").replaceAll(" ", ""), exTotalPayment);
+        calcPage.checkElement(calcPage.percentSum.getText().replace("руб.", "").replaceAll(" ", ""), exPercentSum);
+        calcPage.checkElement(calcPage.interestRate.getText().replace("%", "").replaceAll(" ", ""), exInterestRate);
     }
 }
